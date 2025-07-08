@@ -3,214 +3,342 @@ package com.literanusa.util;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import javax.imageio.ImageIO;
-import java.io.File;
+import java.net.URL;
 
 public class ImageUtils {
-
-    // Main method untuk load image dengan resize
+    
     public static ImageIcon loadImageIcon(String path, int width, int height) {
         try {
-            BufferedImage originalImage = null;
-
-            // First try to load from resources
-            InputStream is = ImageUtils.class.getResourceAsStream(path);
-            if (is != null) {
-                originalImage = ImageIO.read(is);
-            } else {
-                // If not found in resources, try to load from file system
-                File file = new File(path);
-                if (file.exists()) {
-                    originalImage = ImageIO.read(file);
+            URL imageURL = ImageUtils.class.getResource(path);
+            if (imageURL != null) {
+                ImageIcon icon = new ImageIcon(imageURL);
+                if (width > 0 && height > 0) {
+                    Image img = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+                    return new ImageIcon(img);
+                }
+                return icon;
+            }
+        } catch (Exception e) {
+            System.out.println("Could not load image: " + path);
+        }
+        
+        // Return a placeholder icon if image not found
+        return createPlaceholderIcon(width, height, path);
+    }
+    
+    private static ImageIcon createPlaceholderIcon(int width, int height, String originalPath) {
+        if (width <= 0) width = 16;
+        if (height <= 0) height = 16;
+        
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = image.createGraphics();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        
+        // Create different icons based on the path
+        if (originalPath.contains("home") || originalPath.contains("house")) {
+            drawHomeIcon(g2d, width, height);
+        } else if (originalPath.contains("catalog") || originalPath.contains("book")) {
+            drawBookIcon(g2d, width, height);
+        } else if (originalPath.contains("loan") || originalPath.contains("borrow")) {
+            drawLoanIcon(g2d, width, height);
+        } else if (originalPath.contains("user") || originalPath.contains("profile")) {
+            drawUserIcon(g2d, width, height);
+        } else if (originalPath.contains("search")) {
+            drawSearchIcon(g2d, width, height);
+        } else if (originalPath.contains("star") || originalPath.contains("rating")) {
+            drawStarIcon(g2d, width, height);
+        } else if (originalPath.contains("heart") || originalPath.contains("wishlist")) {
+            drawHeartIcon(g2d, width, height);
+        } else if (originalPath.contains("available")) {
+            drawCheckIcon(g2d, width, height);
+        } else if (originalPath.contains("unavailable")) {
+            drawXIcon(g2d, width, height);
+        } else if (originalPath.contains("category")) {
+            drawCategoryIcon(g2d, width, height);
+        } else if (originalPath.contains("popular")) {
+            drawTrophyIcon(g2d, width, height);
+        } else {
+            drawDefaultIcon(g2d, width, height);
+        }
+        
+        g2d.dispose();
+        return new ImageIcon(image);
+    }
+    
+    private static void drawHomeIcon(Graphics2D g2d, int width, int height) {
+        g2d.setColor(new Color(95, 158, 160));
+        g2d.setStroke(new BasicStroke(2f));
+        
+        int margin = 2;
+        int x = margin;
+        int y = margin;
+        int w = width - 2 * margin;
+        int h = height - 2 * margin;
+        
+        // House shape
+        int[] xPoints = {x + w/2, x, x + w/4, x + 3*w/4, x + w};
+        int[] yPoints = {y, y + h/3, y + h, y + h, y + h/3};
+        g2d.fillPolygon(xPoints, yPoints, 5);
+        
+        // Door
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(x + w/2 - w/8, y + 2*h/3, w/4, h/3);
+    }
+    
+    private static void drawBookIcon(Graphics2D g2d, int width, int height) {
+        g2d.setColor(new Color(72, 201, 176));
+        
+        int margin = 2;
+        int x = margin;
+        int y = margin;
+        int w = width - 2 * margin;
+        int h = height - 2 * margin;
+        
+        // Book cover
+        g2d.fillRect(x, y, w, h);
+        g2d.setColor(Color.WHITE);
+        g2d.drawRect(x, y, w, h);
+        
+        // Pages
+        g2d.setColor(new Color(95, 158, 160));
+        for (int i = 1; i <= 3; i++) {
+            g2d.drawLine(x + i * w/5, y + h/4, x + i * w/5, y + 3*h/4);
+        }
+    }
+    
+    private static void drawLoanIcon(Graphics2D g2d, int width, int height) {
+        g2d.setColor(new Color(95, 158, 160));
+        g2d.setStroke(new BasicStroke(2f));
+        
+        int margin = 2;
+        int x = margin;
+        int y = margin;
+        int w = width - 2 * margin;
+        int h = height - 2 * margin;
+        
+        // Arrow pointing right
+        g2d.drawLine(x, y + h/2, x + w - 4, y + h/2);
+        g2d.drawLine(x + w - 6, y + h/4, x + w - 2, y + h/2);
+        g2d.drawLine(x + w - 6, y + 3*h/4, x + w - 2, y + h/2);
+    }
+    
+    private static void drawUserIcon(Graphics2D g2d, int width, int height) {
+        g2d.setColor(new Color(95, 158, 160));
+        
+        int margin = 2;
+        int x = margin;
+        int y = margin;
+        int w = width - 2 * margin;
+        int h = height - 2 * margin;
+        
+        // Head
+        g2d.fillOval(x + w/4, y, w/2, h/2);
+        
+        // Body
+        g2d.fillOval(x, y + h/2, w, h/2);
+    }
+    
+    private static void drawSearchIcon(Graphics2D g2d, int width, int height) {
+        g2d.setColor(new Color(95, 158, 160));
+        g2d.setStroke(new BasicStroke(2f));
+        
+        int margin = 2;
+        int x = margin;
+        int y = margin;
+        int w = width - 2 * margin;
+        int h = height - 2 * margin;
+        
+        // Magnifying glass
+        g2d.drawOval(x, y, w - 4, h - 4);
+        g2d.drawLine(x + w - 6, y + h - 6, x + w - 2, y + h - 2);
+    }
+    
+    private static void drawStarIcon(Graphics2D g2d, int width, int height) {
+        g2d.setColor(Color.ORANGE);
+        
+        int margin = 2;
+        int cx = width / 2;
+        int cy = height / 2;
+        int r = Math.min(width, height) / 2 - margin;
+        
+        // Simple star shape
+        int[] xPoints = new int[10];
+        int[] yPoints = new int[10];
+        
+        for (int i = 0; i < 10; i++) {
+            double angle = Math.PI * i / 5;
+            int radius = (i % 2 == 0) ? r : r / 2;
+            xPoints[i] = (int) (cx + radius * Math.cos(angle - Math.PI / 2));
+            yPoints[i] = (int) (cy + radius * Math.sin(angle - Math.PI / 2));
+        }
+        
+        g2d.fillPolygon(xPoints, yPoints, 10);
+    }
+    
+    private static void drawHeartIcon(Graphics2D g2d, int width, int height) {
+        g2d.setColor(new Color(255, 105, 180));
+        
+        int margin = 2;
+        int x = margin;
+        int y = margin;
+        int w = width - 2 * margin;
+        int h = height - 2 * margin;
+        
+        // Simple heart shape using two circles and a triangle
+        g2d.fillOval(x, y, w/2, h/2);
+        g2d.fillOval(x + w/2, y, w/2, h/2);
+        
+        int[] xPoints = {x, x + w, x + w/2};
+        int[] yPoints = {y + h/3, y + h/3, y + h};
+        g2d.fillPolygon(xPoints, yPoints, 3);
+    }
+    
+    private static void drawCheckIcon(Graphics2D g2d, int width, int height) {
+        g2d.setColor(new Color(40, 167, 69));
+        g2d.setStroke(new BasicStroke(2f));
+        
+        int margin = 2;
+        int x = margin;
+        int y = margin;
+        int w = width - 2 * margin;
+        int h = height - 2 * margin;
+        
+        // Check mark
+        g2d.drawLine(x + w/4, y + h/2, x + w/2, y + 3*h/4);
+        g2d.drawLine(x + w/2, y + 3*h/4, x + 3*w/4, y + h/4);
+    }
+    
+    private static void drawXIcon(Graphics2D g2d, int width, int height) {
+        g2d.setColor(new Color(220, 53, 69));
+        g2d.setStroke(new BasicStroke(2f));
+        
+        int margin = 2;
+        int x = margin;
+        int y = margin;
+        int w = width - 2 * margin;
+        int h = height - 2 * margin;
+        
+        // X mark
+        g2d.drawLine(x, y, x + w, y + h);
+        g2d.drawLine(x + w, y, x, y + h);
+    }
+    
+    private static void drawCategoryIcon(Graphics2D g2d, int width, int height) {
+        g2d.setColor(new Color(95, 158, 160));
+        
+        int margin = 2;
+        int x = margin;
+        int y = margin;
+        int w = width - 2 * margin;
+        int h = height - 2 * margin;
+        
+        // Grid of squares
+        int squareSize = w / 3;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if ((i + j) % 2 == 0) {
+                    g2d.fillRect(x + i * squareSize, y + j * squareSize, squareSize - 1, squareSize - 1);
                 }
             }
-
-            if (originalImage != null) {
-                Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-                return new ImageIcon(scaledImage);
-            }
-
-        } catch (IOException e) {
-            System.err.println("Error loading image: " + path);
-            e.printStackTrace();
         }
-        return null;
     }
-
-    // Method untuk load image tanpa resize
-    public static ImageIcon loadImageIcon(String path) {
-        try {
-            InputStream is = ImageUtils.class.getResourceAsStream(path);
-            if (is != null) {
-                BufferedImage originalImage = ImageIO.read(is);
-                return new ImageIcon(originalImage);
-            } else {
-                // Try file system
-                File file = new File(path);
-                if (file.exists()) {
-                    BufferedImage originalImage = ImageIO.read(file);
-                    return new ImageIcon(originalImage);
-                }
-            }
-        } catch (IOException e) {
-            System.err.println("Error loading image: " + path);
-            e.printStackTrace();
-        }
-        return null;
+    
+    private static void drawTrophyIcon(Graphics2D g2d, int width, int height) {
+        g2d.setColor(Color.ORANGE);
+        
+        int margin = 2;
+        int x = margin;
+        int y = margin;
+        int w = width - 2 * margin;
+        int h = height - 2 * margin;
+        
+        // Trophy cup
+        g2d.fillRect(x + w/4, y, w/2, 2*h/3);
+        
+        // Base
+        g2d.fillRect(x, y + 2*h/3, w, h/3);
+        
+        // Handles
+        g2d.drawArc(x - w/8, y + h/8, w/4, h/4, -90, 180);
+        g2d.drawArc(x + 7*w/8, y + h/8, w/4, h/4, 90, 180);
     }
-
-    public static JLabel createImageLabel(String imagePath, int width, int height) {
+    
+    private static void drawDefaultIcon(Graphics2D g2d, int width, int height) {
+        g2d.setColor(new Color(95, 158, 160));
+        
+        int margin = 2;
+        int x = margin;
+        int y = margin;
+        int w = width - 2 * margin;
+        int h = height - 2 * margin;
+        
+        // Simple rectangle with question mark
+        g2d.drawRect(x, y, w, h);
+        g2d.setFont(new Font("Arial", Font.BOLD, Math.min(width, height) / 2));
+        FontMetrics fm = g2d.getFontMetrics();
+        String text = "?";
+        int textX = x + (w - fm.stringWidth(text)) / 2;
+        int textY = y + (h + fm.getAscent()) / 2;
+        g2d.drawString(text, textX, textY);
+    }
+    
+    public static JLabel createBookCoverLabel(String coverImage, int width, int height) {
+        String imagePath = "/images/covers/" + (coverImage != null ? coverImage : "default-book-cover.jpeg");
         ImageIcon icon = loadImageIcon(imagePath, width, height);
-        if (icon != null) {
-            return new JLabel(icon);
-        } else {
-            return new JLabel("Image not found: " + imagePath);
-        }
-    }
-
-    public static JPanel createHeaderPanel(String headerImagePath, int height) {
-        JPanel headerPanel = new JPanel();
-        headerPanel.setLayout(new BorderLayout());
-        headerPanel.setPreferredSize(new Dimension(0, height));
-
-        ImageIcon headerIcon = loadImageIcon(headerImagePath);
-        if (headerIcon != null) {
-            JLabel headerLabel = new JLabel(headerIcon);
-            headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            headerPanel.add(headerLabel, BorderLayout.CENTER);
-        } else {
-            headerPanel.setBackground(new Color(139, 69, 19));
-            JLabel fallbackLabel = new JLabel("LiteraNusa Header", SwingConstants.CENTER);
-            fallbackLabel.setForeground(Color.WHITE);
-            headerPanel.add(fallbackLabel, BorderLayout.CENTER);
-        }
-
-        return headerPanel;
-    }
-
-    public static ImageIcon loadBookCover(String coverImageName, int width, int height) {
-        String imagePath = "/images/covers/" + (coverImageName != null ? coverImageName : "default-book-cover.jpg");
-        ImageIcon icon = loadImageIcon(imagePath, width, height);
-
-        // If specific cover not found, try default
+        
         if (icon == null) {
-            icon = loadImageIcon("/images/covers/default-book-cover.jpg", width, height);
+            // Create a book placeholder
+            BufferedImage placeholder = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = placeholder.createGraphics();
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            
+            // Background
+            g2d.setColor(new Color(248, 249, 250));
+            g2d.fillRect(0, 0, width, height);
+            
+            // Border
+            g2d.setColor(new Color(222, 226, 230));
+            g2d.drawRect(0, 0, width - 1, height - 1);
+            
+            // Book icon
+            g2d.setColor(new Color(95, 158, 160));
+            drawBookIcon(g2d, width, height);
+            
+            g2d.dispose();
+            icon = new ImageIcon(placeholder);
         }
-
-        return icon;
-    }
-
-    public static JLabel createBookCoverLabel(String coverImageName, int width, int height) {
-        ImageIcon coverIcon = loadBookCover(coverImageName, width, height);
-
-        if (coverIcon != null) {
-            JLabel coverLabel = new JLabel(coverIcon);
-            coverLabel.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
-                    BorderFactory.createEmptyBorder(2, 2, 2, 2)
-            ));
-            coverLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            return coverLabel;
-        } else {
-            // Enhanced fallback design
-            JLabel fallbackLabel = new JLabel();
-            fallbackLabel.setPreferredSize(new Dimension(width, height));
-            fallbackLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            fallbackLabel.setVerticalAlignment(SwingConstants.CENTER);
-
-            // Create a gradient background
-            fallbackLabel.setOpaque(true);
-            fallbackLabel.setBackground(new Color(245, 245, 220));
-            fallbackLabel.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createEmptyBorder(2, 2, 4, 4),
-                    BorderFactory.createLineBorder(new Color(0, 0, 0, 50), 1)
-            ));
-
-            // Add book icon
-            fallbackLabel.setText("<html><div style='text-align: center;'>" +
-                    "<div style='font-size: 48px; color: #CD853F;'>📚</div>" +
-                    "<div style='font-size: 12px; color: #8B4513; margin-top: 10px;'>Cover<br>Not Available</div>" +
-                    "</div></html>");
-
-            return fallbackLabel;
-        }
-    }
-
-    // Method untuk membuat card dengan shadow effect
-    public static JPanel createShadowPanel(JPanel content) {
-        JPanel shadowPanel = new JPanel();
-        shadowPanel.setLayout(new BorderLayout());
-        shadowPanel.setOpaque(false);
-
-        // Add shadow effect
-        shadowPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createEmptyBorder(2, 2, 4, 4),
-                BorderFactory.createLineBorder(new Color(0, 0, 0, 50), 1)
-        ));
-
-        shadowPanel.add(content, BorderLayout.CENTER);
-        return shadowPanel;
+        
+        return new JLabel(icon);
     }
 
     // Method untuk resize image dengan kualitas tinggi
-    public static BufferedImage resizeImageHighQuality(BufferedImage originalImage, int targetWidth, int targetHeight) {
-        BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = resizedImage.createGraphics();
-
-        // Set rendering hints untuk kualitas tinggi
-        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        g2d.drawImage(originalImage, 0, 0, targetWidth, targetHeight, null);
-        g2d.dispose();
-
-        return resizedImage;
+    public static ImageIcon resizeImageIcon(ImageIcon icon, int width, int height) {
+        if (icon == null) return null;
+        
+        Image img = icon.getImage();
+        Image resizedImage = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        return new ImageIcon(resizedImage);
     }
 
-    // Add method for creating circular profile pictures
-    public static ImageIcon createCircularProfilePicture(String imagePath, int size) {
-        try {
-            BufferedImage originalImage = null;
+    // Method untuk membuat gradient background
+    public static void paintGradientBackground(Graphics g, Component component, Color color1, Color color2) {
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        
+        GradientPaint gradient = new GradientPaint(
+            0, 0, color1,
+            component.getWidth(), component.getHeight(), color2
+        );
+        g2d.setPaint(gradient);
+        g2d.fillRect(0, 0, component.getWidth(), component.getHeight());
+    }
 
-            // Try to load from resources first
-            InputStream is = ImageUtils.class.getResourceAsStream(imagePath);
-            if (is != null) {
-                originalImage = ImageIO.read(is);
-            } else {
-                // Try to load from file system
-                File file = new File(imagePath);
-                if (file.exists()) {
-                    originalImage = ImageIO.read(file);
-                }
-            }
-
-            if (originalImage == null) {
-                return null;
-            }
-
-            // Create circular image
-            BufferedImage circularImage = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2d = circularImage.createGraphics();
-
-            // Enable anti-aliasing
-            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-            // Create circular clip
-            g2d.setClip(new java.awt.geom.Ellipse2D.Float(0, 0, size, size));
-
-            // Draw the image
-            g2d.drawImage(originalImage.getScaledInstance(size, size, Image.SCALE_SMOOTH), 0, 0, null);
-            g2d.dispose();
-
-            return new ImageIcon(circularImage);
-
-        } catch (IOException e) {
-            System.err.println("Error creating circular profile picture: " + imagePath);
-            e.printStackTrace();
-            return null;
+    // Method untuk membuat shadow effect
+    public static void paintShadow(Graphics2D g2d, int x, int y, int width, int height, int shadowSize) {
+        Color shadowColor = new Color(0, 0, 0, 20);
+        for (int i = 0; i < shadowSize; i++) {
+            g2d.setColor(new Color(0, 0, 0, 20 - i * 2));
+            g2d.drawRoundRect(x + i, y + i, width - 2*i, height - 2*i, 5, 5);
         }
     }
 }
