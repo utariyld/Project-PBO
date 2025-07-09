@@ -238,7 +238,7 @@ public class WishlistManager {
                 .sorted(Map.Entry.<Integer, Integer>comparingByValue().reversed())
                 .limit(limit)
                 .map(Map.Entry::getKey)
-                .collect(HashSet::new, (set, entry) -> set.add(entry.getKey()), HashSet::addAll);
+                .collect(HashSet::new, (set, bookId) -> set.add(bookId), HashSet::addAll);
     }
     
     // Cleanup method untuk menghapus wishlist user yang sudah tidak ada
