@@ -1,176 +1,232 @@
-# Dashboard Data Strategis BPS
+# Sistem Pengelolaan Logistik UKM KSR
 
-Portal resmi Badan Pusat Statistik untuk data pembangunan nasional dan daerah yang interaktif dan informatif.
+Sistem pengelolaan logistik dan pengurus harian markas UKM KSR yang komprehensif dengan fitur manajemen barang, peminjaman, jadwal jaga medis, dan dashboard statistik.
 
 ## 🚀 Fitur Utama
 
-### Untuk Pengguna Umum
-- **Beranda**: Ringkasan indikator strategis (inflasi, kemiskinan, IPM) dengan kartu interaktif dan grafik
-- **Visualisasi Data**: Grafik dan peta interaktif dengan filter berdasarkan:
-  - Kategori (ekonomi, sosial, lingkungan, pemerintahan)
-  - Tahun dan periode
-  - Wilayah geografis
-- **Metadata**: Metodologi, sumber data, dan definisi indikator yang lengkap
-- **Feedback**: Formulir untuk saran, laporan masalah, dan koreksi data
-- **Tentang Kami**: Profil BPS, struktur organisasi, dan kontak resmi
+### 1. Manajemen Pengguna
+- **Registrasi** - Pendaftaran akun pengguna baru
+- **Login** - Autentikasi dengan JWT token
+- **Profil** - Melihat dan mengedit profil pengguna
+- **Ganti Password** - Mengubah password akun
+- **Hapus Akun** - Menghapus akun pengguna
 
-### Untuk Admin/Petugas BPS
-- **Dashboard Admin**: Statistik sistem dan aktivitas pengguna
-- **Manajemen Indikator**: Kelola data dan indikator statistik
-- **Manajemen Pengguna**: Administrasi akun dan hak akses
-- **Kelola Feedback**: Monitor dan respons feedback dari pengguna
-- **Pengaturan Sistem**: Konfigurasi sistem dan keamanan
+### 2. Manajemen Data Barang
+- **CRUD Barang** - Tambah, ubah, hapus, dan pencarian data inventaris
+- **Kategori Barang** - Pengelompokan barang (alat medis, logistik, seragam, perlengkapan kegiatan)
+- **Status Barang** - Tracking kondisi barang (tersedia, dipinjam, rusak, hilang)
+- **Pencarian** - Pencarian barang berdasarkan nama, brand, model, dll
+
+### 3. Sistem Peminjaman & Pengembalian
+- **Permintaan Peminjaman** - Pengajuan peminjaman barang oleh anggota
+- **Persetujuan** - Approval peminjaman oleh admin/staff logistik
+- **Riwayat Peminjaman** - Pencatatan lengkap transaksi peminjaman
+- **Pengembalian** - Proses pengembalian barang
+- **Tracking Keterlambatan** - Monitoring barang yang terlambat dikembalikan
+
+### 4. Penjadwalan Jaga Medis 🩺
+- **Buat Jadwal** - Penentuan jadwal jaga medis berdasarkan tanggal, waktu, dan lokasi
+- **Assignment Anggota** - Plot anggota ke dalam jadwal (otomatis/manual)
+- **Kalender Kegiatan** - Tampilan kalender jadwal jaga
+- **Status Tracking** - Monitoring status jadwal (terjadwal, berlangsung, selesai, dibatalkan)
+
+### 5. Dashboard Statistik
+- **Visualisasi Data** - Grafik dan statistik inventaris
+- **Laporan Peminjaman** - Statistik peminjaman bulanan
+- **Statistik Jadwal** - Data kegiatan jaga medis
+- **Analisis Pengguna** - Distribusi pengguna berdasarkan role
+
+### 6. Manajemen Role & Akses
+- **Admin** - Akses penuh ke semua fitur
+- **Staff Logistik** - Manajemen barang dan persetujuan peminjaman
+- **Anggota** - Peminjaman barang dan melihat jadwal
 
 ## 🛠️ Teknologi yang Digunakan
 
-- **Frontend**: React 18, Tailwind CSS
-- **Routing**: React Router DOM
-- **Grafik**: Chart.js, React-Chartjs-2, Recharts
-- **Peta**: Leaflet, React-Leaflet
-- **Icons**: React Icons (Feather Icons)
-- **Animasi**: Framer Motion
-- **HTTP Client**: Axios
+- **Backend**: Java 17, Spring Boot 3.2.0
+- **Security**: Spring Security dengan JWT Authentication
+- **Database**: H2 Database (development), JPA/Hibernate
+- **Documentation**: OpenAPI 3 (Swagger)
+- **Build Tool**: Maven
+- **Testing**: Spring Boot Test
 
-## 🎨 Desain & UI/UX
+## 📋 Prasyarat
 
-### Tema Khas BPS
-- **Warna Utama**: Biru BPS (#1e40af)
-- **Warna Sekunder**: Biru terang (#3b82f6)
-- **Warna Aksen**: Kuning/Emas (#f59e0b)
-- **Font**: Inter (modern dan profesional)
+- Java 17 atau lebih tinggi
+- Maven 3.6 atau lebih tinggi
+- IDE (IntelliJ IDEA, Eclipse, VS Code)
 
-### Responsif & Aksesibilitas
-- Desain mobile-first yang responsif
-- Navigasi yang mudah dipahami
-- Kontras warna yang baik untuk keterbacaan
-- Loading states dan feedback visual
+## 🚀 Instalasi dan Menjalankan Aplikasi
 
-## 🚀 Instalasi dan Menjalankan Proyek
-
-### Prerequisites
-- Node.js (versi 14 atau lebih baru)
-- npm atau yarn
-
-### Langkah Instalasi
-
-1. Clone repository
+### 1. Clone Repository
 ```bash
 git clone <repository-url>
-cd dashboard-bps
+cd logistics-management
 ```
 
-2. Install dependencies
+### 2. Build Aplikasi
 ```bash
-npm install
+mvn clean install
 ```
 
-3. Jalankan aplikasi dalam mode development
+### 3. Jalankan Aplikasi
 ```bash
-npm start
+mvn spring-boot:run
 ```
 
-4. Buka [http://localhost:3000](http://localhost:3000) di browser
-
-### Build untuk Production
+Atau jalankan file JAR:
 ```bash
-npm run build
+java -jar target/logistics-management-0.0.1-SNAPSHOT.jar
 ```
 
-## 👥 Kredensial Demo
+### 4. Akses Aplikasi
+- **API Base URL**: http://localhost:8080
+- **Swagger UI**: http://localhost:8080/swagger-ui/index.html
+- **H2 Console**: http://localhost:8080/h2-console
+  - JDBC URL: `jdbc:h2:mem:testdb`
+  - Username: `sa`
+  - Password: `password`
 
-Untuk mencoba fitur admin, gunakan kredensial berikut:
+## 👥 Akun Default
 
-- **Admin**: 
-  - Username: `admin`
-  - Password: `admin123`
+Sistem akan otomatis membuat akun default saat pertama kali dijalankan:
 
-- **Petugas**: 
-  - Username: `petugas`
-  - Password: `petugas123`
+| Role | Username | Password | Email |
+|------|----------|----------|-------|
+| Admin | admin | admin123 | admin@ukmksr.ac.id |
+| Staff Logistik | logistics | logistics123 | logistics@ukmksr.ac.id |
+| Anggota | member | member123 | member@ukmksr.ac.id |
 
-## 📁 Struktur Proyek
+## 📚 API Documentation
 
+### Authentication Endpoints
 ```
-src/
-├── components/          # Komponen React yang dapat digunakan ulang
-│   ├── Header.js       # Navigasi utama dan menu
-│   └── Footer.js       # Footer dengan kontak dan media sosial
-├── pages/              # Halaman-halaman utama
-│   ├── Home.js         # Halaman beranda dengan indikator strategis
-│   ├── VisualisasiData.js  # Grafik dan peta interaktif
-│   ├── Metadata.js     # Metodologi dan definisi
-│   ├── Feedback.js     # Formulir feedback dan saran
-│   ├── TentangKami.js  # Profil BPS dan informasi organisasi
-│   ├── Login.js        # Halaman login untuk petugas
-│   └── Admin.js        # Dashboard admin untuk manajemen
-├── index.css           # Styling global dengan Tailwind CSS
-├── App.js              # Komponen utama dan routing
-└── index.js            # Entry point aplikasi
+POST /api/auth/register     - Registrasi pengguna baru
+POST /api/auth/login        - Login pengguna
+GET  /api/auth/validate     - Validasi token JWT
 ```
 
-## 🎯 Fitur yang Diimplementasikan
+### User Management Endpoints
+```
+GET    /api/users/profile           - Lihat profil pengguna
+PUT    /api/users/profile           - Update profil pengguna
+PUT    /api/users/change-password   - Ganti password
+DELETE /api/users/account           - Hapus akun
+GET    /api/users/all              - Lihat semua pengguna (Admin)
+GET    /api/users/{id}             - Lihat pengguna berdasarkan ID (Admin)
+```
 
-### ✅ Sudah Selesai
-- [x] Struktur proyek dan konfigurasi dasar
-- [x] Header dengan navigasi utama dan logo BPS
-- [x] Footer dengan kontak dan media sosial
-- [x] Halaman Beranda dengan kartu indikator dan grafik
-- [x] Halaman Visualisasi Data dengan filter dan grafik interaktif
-- [x] Halaman Metadata dengan metodologi dan definisi
-- [x] Halaman Feedback dengan formulir lengkap
-- [x] Halaman Tentang Kami dengan profil BPS
-- [x] Sistem login dengan role-based access
-- [x] Dashboard Admin untuk manajemen data
-- [x] Desain responsif dan tema BPS
+### Item Management Endpoints
+```
+POST   /api/items                  - Tambah barang baru
+GET    /api/items                  - Lihat semua barang
+GET    /api/items/{id}             - Lihat detail barang
+PUT    /api/items/{id}             - Update barang
+DELETE /api/items/{id}             - Hapus barang
+GET    /api/items/search           - Cari barang
+GET    /api/items/category/{cat}   - Barang berdasarkan kategori
+GET    /api/items/status/{status}  - Barang berdasarkan status
+```
 
-### 🔄 Pengembangan Lanjutan (Opsional)
-- [ ] Integrasi dengan API BPS yang sesungguhnya
-- [ ] Implementasi peta Indonesia yang interaktif
-- [ ] Sistem notifikasi real-time
-- [ ] Export data ke berbagai format (PDF, Excel, CSV)
-- [ ] Pencarian dan filter data yang lebih advanced
-- [ ] Dashboard analytics untuk tracking penggunaan
-- [ ] Multilingual support (Indonesia/English)
+### Borrowing Management Endpoints
+```
+POST   /api/borrowing/request      - Buat permintaan peminjaman
+PUT    /api/borrowing/{id}/approve - Setujui peminjaman
+PUT    /api/borrowing/{id}/reject  - Tolak peminjaman
+PUT    /api/borrowing/{id}/return  - Kembalikan barang
+GET    /api/borrowing              - Lihat semua catatan peminjaman
+GET    /api/borrowing/my-records   - Lihat catatan peminjaman sendiri
+GET    /api/borrowing/overdue      - Lihat peminjaman terlambat
+```
 
-## 📊 Data dan Visualisasi
+### Medical Schedule Endpoints
+```
+POST   /api/medical-schedules              - Buat jadwal jaga medis
+GET    /api/medical-schedules              - Lihat semua jadwal
+GET    /api/medical-schedules/{id}         - Lihat detail jadwal
+PUT    /api/medical-schedules/{id}         - Update jadwal
+DELETE /api/medical-schedules/{id}         - Hapus jadwal
+GET    /api/medical-schedules/my-schedules - Lihat jadwal sendiri
+PUT    /api/medical-schedules/{id}/assign-members - Assign anggota ke jadwal
+```
 
-### Indikator Strategis yang Ditampilkan
-1. **Inflasi**: Tren bulanan dengan grafik line chart
-2. **Tingkat Kemiskinan**: Data tahunan dengan bar chart
-3. **IPM (Indeks Pembangunan Manusia)**: Progress per provinsi
-4. **Pertumbuhan Ekonomi**: Data kuartalan dan sektoral
+### Dashboard Endpoints
+```
+GET    /api/dashboard/stats        - Lihat statistik dashboard
+```
 
-### Jenis Visualisasi
-- Line charts untuk tren waktu
-- Bar charts untuk perbandingan
-- Doughnut charts untuk komposisi/proporsi
-- Peta interaktif untuk data geospasial
-- Cards dan metrics untuk ringkasan data
+## 🔐 Authentication
 
-## 🔐 Keamanan
+Semua endpoint (kecuali `/api/auth/register` dan `/api/auth/login`) memerlukan authentication menggunakan JWT token.
 
-- Autentikasi berbasis role (Admin/Petugas)
-- Session management
-- Input validation dan sanitization
-- Secure headers dan HTTPS ready
-- Audit logging untuk aktivitas admin
+### Cara Menggunakan Token:
+1. Login melalui `/api/auth/login` untuk mendapatkan token
+2. Sertakan token di header request:
+   ```
+   Authorization: Bearer <your-jwt-token>
+   ```
 
-## 📱 Kompatibilitas Browser
+## 🗄️ Database Schema
 
-- Chrome (terbaru)
-- Firefox (terbaru)
-- Safari (terbaru)
-- Edge (terbaru)
-- Mobile browsers (iOS Safari, Chrome Mobile)
+### Tabel Utama:
+- **users** - Data pengguna dan role
+- **items** - Data inventaris barang
+- **borrowing_records** - Catatan peminjaman barang
+- **medical_schedules** - Jadwal jaga medis
+- **schedule_assignments** - Assignment anggota ke jadwal
+
+## 🔧 Konfigurasi
+
+### Application Properties
+```yaml
+# Database Configuration
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password: password
+
+# JWT Configuration
+jwt:
+  secret: mySecretKey123456789012345678901234567890
+  expiration: 86400000 # 24 hours
+
+# Server Configuration
+server:
+  port: 8080
+```
+
+## 🧪 Testing
+
+Jalankan unit test:
+```bash
+mvn test
+```
+
+## 📈 Monitoring dan Logging
+
+- Log level dapat dikonfigurasi di `application.yml`
+- H2 Console tersedia untuk monitoring database
+- Swagger UI untuk testing API endpoints
 
 ## 🤝 Kontribusi
 
-Proyek ini dikembangkan khusus untuk Badan Pusat Statistik. Untuk kontribusi atau pertanyaan teknis, silakan hubungi tim pengembang internal BPS.
+1. Fork repository
+2. Buat feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push ke branch (`git push origin feature/AmazingFeature`)
+5. Buat Pull Request
 
-## 📄 Lisensi
+## 📝 License
 
-© 2024 Badan Pusat Statistik Republik Indonesia. Hak Cipta Dilindungi.
+Distributed under the MIT License. See `LICENSE` for more information.
+
+## 📞 Kontak
+
+UKM KSR Development Team - dev@ukmksr.ac.id
+
+Project Link: [https://github.com/ukmksr/logistics-management](https://github.com/ukmksr/logistics-management)
 
 ---
 
-**Catatan**: Dashboard ini adalah implementasi modern untuk meningkatkan aksesibilitas dan interaktivitas data statistik BPS kepada masyarakat luas dengan tetap mempertahankan akurasi dan integritas data yang menjadi standar BPS.
+**Catatan**: Aplikasi ini dikembangkan khusus untuk kebutuhan UKM KSR dalam mengelola logistik dan pengurus harian markas. Untuk deployment production, pastikan untuk menggunakan database yang lebih robust seperti PostgreSQL atau MySQL, dan konfigurasi keamanan yang sesuai.
